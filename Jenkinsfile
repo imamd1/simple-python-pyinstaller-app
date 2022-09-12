@@ -11,7 +11,7 @@ node {
   }
   stage('Deliver') {
     withDockerContainer('cdrx/pyinstaller-linux:python2') {
-      input: 'Are You Sure?'
+      input message: 'Are You Sure?'
       sh 'pyinstaller --onefile sources/add2vals.py'
     }
   }

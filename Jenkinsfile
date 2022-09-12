@@ -12,7 +12,7 @@ node {
   stage('Deliver') {
     withDockerContainer('cdrx/pyinstaller-linux:python2') {
       echo 'Mencoba'
-      sh 'pyinstaller --onefile sources/add2vals.py'
+      // sh 'pyinstaller --onefile sources/add2vals.py'
     }
   }
 }

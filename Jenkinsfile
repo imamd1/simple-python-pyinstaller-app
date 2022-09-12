@@ -11,7 +11,7 @@ node {
   }
   stage('Deliver') {
     withDockerContainer('cdrx/pyinstaller-linux:python2') {
-      input message: 'Are You Sure?'
+      echo 'Mencoba'
       sh 'pyinstaller --onefile sources/add2vals.py'
     }
   }

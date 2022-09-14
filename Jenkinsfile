@@ -9,10 +9,19 @@ node {
       sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
     }
   }
-  stage('Deploy') {
-    docker.image('cdrx/pyinstaller-linux:python2').inside {
-        sh 'pyinstaller --onefile sources/add2vals.py'
-        archiveArtifacts 'dist/add2vals'
-    }
+  stage('Deliver') {
+    withEnv(
+        ['VOLUME = \'$(pwd)/sources:/src\'', 
+        'IMAGE = \'cdrx/pyinstaller-linux:python2\''
+        ]) {
+            dir('env.BUILD_ID') {
+                unstash 'compiled-results'
+                sh `docker run --rm -v ${VOLUME} ${IMAGE} \'pyinstaller -F add2vals.py\''`
+            }
+        }
+    // docker.image('cdrx/pyinstaller-linux:python2').inside {
+    //     sh 'pyinstaller --onefile sources/add2vals.py'
+    //     archiveArtifacts 'dist/add2vals'
+    // }
   }
 }

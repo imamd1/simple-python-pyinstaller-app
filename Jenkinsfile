@@ -11,9 +11,9 @@ node {
   }
   stage('Deliver') {
     dir('env.BUILD_ID') {
-                sh 'docker run --rm -v \'/var/jenkins_home/sources:/src'\ \'cdrx/pyinstaller-linux:python2\' \'pyinstaller -F add2vals.py\''
+                sh 'docker run --rm -v /var/jenkins_home/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
                 archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals" 
-                sh 'docker run --rm -v \'/var/jenkins_home/sources:/src'\ \'cdrx/pyinstaller-linux:python2\' 'rm -rf build dist''
+                sh 'docker run --rm -v /var/jenkins_home/sources:/src cdrx/pyinstaller-linux:python2 \'rm -rf build dist'\'
             }
     // docker.image('cdrx/pyinstaller-linux:python2').inside {
     //     sh 'pyinstaller --onefile sources/add2vals.py'

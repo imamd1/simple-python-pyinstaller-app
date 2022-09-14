@@ -10,16 +10,11 @@ node {
     }
   }
   stage('Deliver') {
-    withEnv(
-        ['VOLUME = \'$(pwd)/sources:/src\'', 
-        'IMAGE = \'cdrx/pyinstaller-linux:python2\''
-        ]) {
-            dir('env.BUILD_ID') {
-                sh "docker run --rm -v ${VOLUME} ${IMAGE} \'pyinstaller -F add2vals.py\'"
+    dir('env.BUILD_ID') {
+                sh "docker run --rm -v \'$(pwd)/sources:/src\' \'cdrx/pyinstaller-linux:python2\' \'pyinstaller -F add2vals.py\'"
                 archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals" 
-                sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+                sh "docker run --rm -v \'$(pwd)/sources:/src\' \'cdrx/pyinstaller-linux:python2\' 'rm -rf build dist'"
             }
-        }
     // docker.image('cdrx/pyinstaller-linux:python2').inside {
     //     sh 'pyinstaller --onefile sources/add2vals.py'
     //     archiveArtifacts 'dist/add2vals'

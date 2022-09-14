@@ -12,10 +12,10 @@ node {
   }
   stage('Deliver') {
     dir('env.BUILD_ID') {
-        sh 'docker run -d cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
+        sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
         unstash 'compiled-results'
         archiveArtifacts "sources/dist/add2vals" 
-        sh 'docker run -d cdrx/pyinstaller-linux:python2 \'rm -rf build dist\''
+        sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'rm -rf build dist\''
     }
 //    withDockerContainer('cdrx/pyinstaller-linux:python2') {
      

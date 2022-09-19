@@ -15,6 +15,7 @@ node {
         sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
         unstash 'compiled-results'
         input message: 'Lanjut ke Tahap Berikutnya?'
+        sleep 60
         archiveArtifacts "sources/dist/add2vals" 
         sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'rm -rf build dist\''
     }

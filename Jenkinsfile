@@ -15,14 +15,14 @@ node(){
 //   stage('Manual Approval') {
 //     input message: 'Lanjut ke Tahap Berikutnya?'
 //   }
-  withDockerContainer('cdrx/pyinstaller-linux:python2') {
+ withEnv(['VOLUME = \'$(pwd)/sources:/src\'', 'IMAGE = \'cdrx/pyinstaller-linux:python2\'']) {
     stage('Deploy') {
       dir('env.BUILD_ID') {
-          sh "docker run -v $(pwd)/sources:/src ${IMAGE} \'pyinstaller -F add2vals.py\'"
+          sh `docker run -v ${VOLUME} ${IMAGE} pyinstaller -F add2vals.py`
           unstash 'compiled-results'
           sleep 60
           archiveArtifacts "sources/dist/add2vals" 
-          sh "docker run -v $(pwd)/sources:/src ${IMAGE} \'rm -rf build dist\'"
+          sh `docker run -v ${VOLUME} ${IMAGE} rm -rf build dist`
       }
     }
   }

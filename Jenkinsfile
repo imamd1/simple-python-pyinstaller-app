@@ -15,16 +15,15 @@ node(){
 //   stage('Manual Approval') {
 //     input message: 'Lanjut ke Tahap Berikutnya?'
 //   }
-//   stage('Deploy') {
-//     dir('env.BUILD_ID') {
-//         sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
-//         unstash 'compiled-results'
-//         sleep 60
-//         archiveArtifacts "sources/dist/add2vals" 
-//         sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'rm -rf build dist\''
-//     }
-// //    withDockerContainer('cdrx/pyinstaller-linux:python2') {
-     
-// //    }
-//   }
+  withDockerContainer('cdrx/pyinstaller-linux:python2') {
+    stage('Deploy') {
+      dir('env.BUILD_ID') {
+          sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
+          unstash 'compiled-results'
+          sleep 60
+          archiveArtifacts "sources/dist/add2vals" 
+          sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'rm -rf build dist\''
+      }
+    }
+  }
 }

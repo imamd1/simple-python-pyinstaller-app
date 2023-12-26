@@ -15,8 +15,8 @@ node(){
 //   stage('Manual Approval') {
 //     input message: 'Lanjut ke Tahap Berikutnya?'
 //   }
- withEnv(['VOLUME = \'$(pwd)/sources:/src\'', 'IMAGE = \'cdrx/pyinstaller-linux:python2\'']) {
     stage('Deploy') {
+      withEnv(['VOLUME = \'$(pwd)/sources:/src\'', 'IMAGE = \'cdrx/pyinstaller-linux:python2\'']) {
       dir('env.BUILD_ID') {
           sh 'docker run -v ${VOLUME} ${IMAGE} pyinstaller -F add2vals.py'
           unstash 'compiled-results'

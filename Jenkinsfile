@@ -12,14 +12,13 @@ node(){
         }
     }
     stage('Deliver') {
-        checkout scm
         withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3']) {
             dir(path: env.BUILD_ID) {
                 unstash name: 'compiled-results'
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
+            }
                 archiveArtifacts "sources/dist/add2vals"
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
-            }
         }
     }
 }

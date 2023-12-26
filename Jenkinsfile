@@ -1,4 +1,4 @@
-node {
+node() {
   stage('Build') {
     withDockerContainer('python:3.12.1-alpine3.19') {
       sh 'python3 -m py_compile sources/add2vals.py sources/calc.py'

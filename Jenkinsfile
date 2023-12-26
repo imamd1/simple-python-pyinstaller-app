@@ -3,7 +3,7 @@ node(){
         stage('Build') {
         sh 'python -m py_compile sources/add2vals.py sources/calc.py'
         // stash(name: 'compiled-results', includes: 'sources/.py')
-        stash includes: 'sources/.py', name: 'compiled-results'
+        stash includes: 'sources/*.py', name: 'compiled-results'
     }
     }
     // stage('Test') {

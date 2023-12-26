@@ -1,12 +1,14 @@
 node(){
-  stage('Build') {
-    withDockerContainer('python:3.8-alpine') {
+  withDockerContainer('python:3.8-alpine') {
+    stage('Build') {
+      checkout scm
       sh 'python -m py_compile sources/add2vals.py sources/calc.py'
       stash includes: 'sources/*.py*', name: 'compiled-results'
     }
   }
-  stage('Test') {
-    withDockerContainer('qnib/pytest') {
+  withDockerContainer('qnib/pytest') {
+    stage('Test') {
+      checkout scm
       sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
     }
   }

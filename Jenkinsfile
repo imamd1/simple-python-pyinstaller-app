@@ -12,22 +12,19 @@ node(){
       sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
     }
   }
-//   stage('Manual Approval') {
-//     input message: 'Lanjut ke Tahap Berikutnya?'
-//   }
+  //   stage('Manual Approval') {
+  //     input message: 'Lanjut ke Tahap Berikutnya?'
+  //   }
 
-  withDockerContainer('cdrx/pyinstaller-linux:python2') {
-    stage('Deploy') {
-    checkout scm
-        dir('env.BUILD_ID') {
-            sh 'docker run -v $(pwd)/sources:/src \'pyinstaller -F add2vals.py\''
-            unstash 'compiled-results'
-            sleep 60
-            archiveArtifacts "sources/dist/add2vals" 
-            sh 'docker run -v $(pwd)/sources:/src \'rm -rf build dist\''
+  stage('Deliver') {
+        withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python2']) {
+            dir(path: env.BUILD_ID) {
+                unstash name: 'compiled-results'
+                sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
+            }
         }
-        
-      }
-      }
+        archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
+        sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+    }
    
 }

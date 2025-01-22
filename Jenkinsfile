@@ -2,6 +2,7 @@ node {
   def builDockerImage = 'python:2-alpine'
   def testDockerImage = 'qnib/pytest'
 
+  checkout scm
   stage('Build') {
     docker.image(builDockerImage).inside {
       sh 'python -m py_compile sources/add2vals.py sources/calc.py'
